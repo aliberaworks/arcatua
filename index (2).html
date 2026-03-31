@@ -1,0 +1,1068 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Arcatua — by aliberaworks</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;600;800&family=DM+Mono:wght@300;400;500&family=Zen+Kaku+Gothic+New:wght@300;400;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #f8f7f4;
+      --surface: #ffffff;
+      --surface2: #f0ede8;
+      --border: #e0dbd3;
+      --accent: #9a6f3f;
+      --accent2: #3f6b9a;
+      --text: #1a1814;
+      --text-muted: #4a453c;
+      --tag-free: #e8f4e8;
+      --tag-free-text: #2d7a2d;
+      --tag-paid: #f4e8e8;
+      --tag-paid-text: #7a2d2d;
+      --radius: 8px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Zen Kaku Gothic New', sans-serif;
+      font-weight: 300;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ── HEADER ── */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(248,247,244,0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 24px;
+      height: 56px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo {
+      font-family: 'DM Mono', monospace;
+      font-size: 18px;
+      font-weight: 500;
+      color: var(--accent);
+      letter-spacing: 0.12em;
+      text-decoration: none;
+    }
+
+    .logo span {
+      color: var(--text-muted);
+      font-size: 12px;
+      font-weight: 300;
+      margin-left: 10px;
+      letter-spacing: 0.05em;
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .api-btn {
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      color: var(--text-muted);
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 6px 14px;
+      cursor: pointer;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+    .api-btn:hover { border-color: var(--accent); color: var(--accent); }
+    .api-btn.set { border-color: var(--tag-free-text); color: var(--tag-free-text); }
+
+    /* ── HERO ── */
+    .hero {
+      padding: 64px 24px 40px;
+      max-width: 960px;
+      margin: 0 auto;
+    }
+
+    .hero-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      color: var(--accent);
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+
+    .hero h1 {
+      font-family: 'Shippori Mincho', serif;
+      font-size: clamp(32px, 5vw, 56px);
+      font-weight: 800;
+      line-height: 1.2;
+      color: var(--text);
+      margin-bottom: 16px;
+    }
+
+    .hero h1 em {
+      font-style: normal;
+      color: var(--accent);
+    }
+
+    .hero p {
+      color: var(--text-muted);
+      font-size: 14px;
+      line-height: 1.8;
+      max-width: 540px;
+    }
+
+    /* ── CONTROLS ── */
+    .controls {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 0 24px 24px;
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .search-wrap {
+      flex: 1;
+      min-width: 200px;
+      position: relative;
+    }
+
+    .search-wrap input {
+      width: 100%;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 10px 16px 10px 40px;
+      color: var(--text);
+      font-family: 'Zen Kaku Gothic New', sans-serif;
+      font-size: 14px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .search-wrap input:focus { border-color: var(--accent); }
+    .search-wrap input::placeholder { color: var(--text-muted); }
+
+    .search-icon {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-muted);
+      font-size: 15px;
+      pointer-events: none;
+    }
+
+    .filter-btns {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .filter-btn {
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      padding: 8px 14px;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.2s;
+      letter-spacing: 0.08em;
+    }
+    .filter-btn:hover { border-color: var(--accent2); color: var(--accent2); }
+    .filter-btn.active { background: var(--accent2); border-color: var(--accent2); color: var(--bg); }
+
+    .sort-select {
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      padding: 8px 14px;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text-muted);
+      cursor: pointer;
+      outline: none;
+    }
+
+    /* ── TABS ── */
+    .tab-bar {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 0 24px 0;
+      display: flex;
+      gap: 0;
+      border-bottom: 1px solid var(--border);
+      overflow-x: auto;
+    }
+
+    .tab-item {
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      padding: 10px 16px;
+      cursor: pointer;
+      color: var(--text-muted);
+      border-bottom: 2px solid transparent;
+      white-space: nowrap;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .tab-item:hover { color: var(--text); }
+    .tab-item.active { color: var(--accent); border-bottom-color: var(--accent); }
+    .tab-item .tab-close {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-left: 4px;
+      line-height: 1;
+    }
+    .tab-item .tab-close:hover { color: var(--text); }
+
+    /* ── APP GRID ── */
+    .app-grid-wrap {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+
+    .section-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 10px;
+      color: var(--text-muted);
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+
+    .app-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 16px;
+    }
+
+    .app-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+      cursor: pointer;
+      transition: all 0.2s;
+      position: relative;
+      overflow: hidden;
+    }
+    .app-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+    .app-card:hover {
+      border-color: var(--accent);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+    }
+    .app-card:hover::before { opacity: 1; }
+
+    .card-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 12px;
+    }
+
+    .card-icon {
+      font-size: 28px;
+      line-height: 1;
+    }
+
+    .card-actions {
+      display: flex;
+      gap: 6px;
+    }
+
+    .fav-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+      color: var(--text-muted);
+      transition: color 0.2s;
+      padding: 0;
+    }
+    .fav-btn:hover { color: var(--accent); }
+    .fav-btn.active { color: var(--accent); }
+
+    .card-title {
+      font-family: 'Shippori Mincho', serif;
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 6px;
+      line-height: 1.4;
+    }
+
+    .card-desc {
+      font-size: 12px;
+      color: var(--text-muted);
+      line-height: 1.7;
+      margin-bottom: 14px;
+    }
+
+    .card-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .card-tags {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .tag {
+      font-family: 'DM Mono', monospace;
+      font-size: 9px;
+      padding: 3px 8px;
+      border-radius: 4px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .tag.free { background: var(--tag-free); color: var(--tag-free-text); }
+    .tag.paid { background: var(--tag-paid); color: var(--tag-paid-text); }
+    .tag.ai { background: #2a2a3d; color: var(--accent2); }
+    .tag.category { background: var(--surface2); color: var(--text-muted); }
+
+    .card-stars {
+      font-family: 'DM Mono', monospace;
+      font-size: 10px;
+      color: var(--text-muted);
+    }
+
+    /* ── APP VIEWER (タブで開くパネル) ── */
+    .app-viewer {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 12px 24px 24px;
+      display: none;
+    }
+    .app-viewer.visible { display: block; }
+
+    .app-frame-wrap {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      height: calc(100vh - 160px);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .app-frame-header {
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .app-frame-title {
+      font-family: 'DM Mono', monospace;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .app-frame-actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    .frame-btn {
+      font-family: 'DM Mono', monospace;
+      font-size: 10px;
+      padding: 5px 12px;
+      border-radius: 4px;
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .frame-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+    iframe {
+      width: 100%;
+      border: none;
+      flex: 1;
+      background: white;
+    }
+
+    /* ── GUIDE MODAL ── */
+    .guide-steps {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    .guide-step {
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+    }
+    .step-num {
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      color: var(--bg);
+      background: var(--accent);
+      border-radius: 50%;
+      width: 22px;
+      height: 22px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+    .step-body strong {
+      display: block;
+      font-size: 14px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+    .step-body p {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-bottom: 0;
+      line-height: 1.6;
+    }
+    .step-body a { color: var(--accent); }
+    .guide-note {
+      background: var(--surface2);
+      border-left: 3px solid var(--accent2);
+      border-radius: 4px;
+      padding: 12px 14px;
+      font-size: 12px;
+      color: var(--text-muted);
+      line-height: 1.7;
+      margin-bottom: 20px;
+    }
+
+    /* ── API KEY MODAL ── */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.4);
+      z-index: 200;
+      align-items: center;
+      justify-content: center;
+    }
+    .modal-overlay.visible { display: flex; }
+
+    .modal {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 32px;
+      width: min(480px, 90vw);
+      position: relative;
+    }
+
+    .modal h2 {
+      font-family: 'Shippori Mincho', serif;
+      font-size: 20px;
+      margin-bottom: 8px;
+    }
+
+    .modal p {
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.7;
+      margin-bottom: 20px;
+    }
+
+    .modal label {
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      color: var(--text-muted);
+      display: block;
+      margin-bottom: 6px;
+      letter-spacing: 0.1em;
+    }
+
+    .modal input[type="text"],
+    .modal input[type="password"] {
+      width: 100%;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 10px 14px;
+      color: var(--text);
+      font-family: 'DM Mono', monospace;
+      font-size: 13px;
+      outline: none;
+      margin-bottom: 16px;
+      transition: border-color 0.2s;
+    }
+    .modal input:focus { border-color: var(--accent); }
+
+    .modal-select {
+      width: 100%;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 10px 14px;
+      color: var(--text);
+      font-family: 'DM Mono', monospace;
+      font-size: 13px;
+      outline: none;
+      margin-bottom: 20px;
+    }
+
+    .modal-btns {
+      display: flex;
+      gap: 10px;
+      justify-content: flex-end;
+    }
+
+    .btn-primary {
+      font-family: 'DM Mono', monospace;
+      font-size: 12px;
+      padding: 10px 20px;
+      border-radius: var(--radius);
+      border: none;
+      background: var(--accent);
+      color: var(--bg);
+      cursor: pointer;
+      letter-spacing: 0.08em;
+      transition: opacity 0.2s;
+    }
+    .btn-primary:hover { opacity: 0.85; }
+
+    .btn-ghost {
+      font-family: 'DM Mono', monospace;
+      font-size: 12px;
+      padding: 10px 20px;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-ghost:hover { border-color: var(--text-muted); color: var(--text); }
+
+    .modal-close {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-size: 20px;
+      cursor: pointer;
+      line-height: 1;
+    }
+
+    /* ── EMPTY STATE ── */
+    .empty {
+      text-align: center;
+      padding: 64px 24px;
+      color: var(--text-muted);
+    }
+    .empty .empty-icon { font-size: 40px; margin-bottom: 16px; }
+    .empty p { font-size: 14px; line-height: 1.8; }
+
+    /* ── FOOTER ── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 24px;
+      text-align: center;
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 48px;
+    }
+    footer a { color: var(--accent); text-decoration: none; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 600px) {
+      .hero { padding: 40px 16px 24px; }
+      .controls, .app-grid-wrap, .app-viewer { padding: 16px; }
+      .tab-bar { padding: 0 16px; }
+      .app-grid { grid-template-columns: 1fr; }
+      .filter-btns { gap: 6px; }
+    }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .app-card { animation: fadeUp 0.3s ease both; }
+    .app-card:nth-child(1) { animation-delay: 0.05s; }
+    .app-card:nth-child(2) { animation-delay: 0.1s; }
+    .app-card:nth-child(3) { animation-delay: 0.15s; }
+    .app-card:nth-child(4) { animation-delay: 0.2s; }
+    .app-card:nth-child(5) { animation-delay: 0.25s; }
+    .app-card:nth-child(6) { animation-delay: 0.3s; }
+
+    .no-results {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 48px;
+      color: var(--text-muted);
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <a class="logo" href="#" onclick="showHome()">ARCATUA<span>by aliberaworks</span></a>
+  <div class="header-right">
+    <button class="api-btn" id="apiBtn" onclick="openApiModal()">⚙ API設定</button>
+  </div>
+</header>
+
+<!-- GUIDE MODAL（初回訪問時） -->
+<div class="modal-overlay" id="guideModal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeGuide()">×</button>
+    <h2>はじめに — Arcatuaの使い方</h2>
+    <p style="margin-bottom:20px">AIツール集です。アプリによってAPIキーが必要なものと不要なものがあります。</p>
+
+    <div class="guide-steps">
+      <div class="guide-step">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <strong>アプリを選ぶ</strong>
+          <p>一覧からアプリをクリックすると、このページ内で即起動します。「無料」タグのアプリはAPIキー不要です。</p>
+        </div>
+      </div>
+      <div class="guide-step">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <strong>AIアプリを使う場合：APIキーを設定する</strong>
+          <p>右上の「⚙ API設定」からAPIキーを入力してください。一度設定すれば全アプリで共通利用できます。</p>
+        </div>
+      </div>
+      <div class="guide-step">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <strong>APIキーの取得方法（無料で始めるなら）</strong>
+          <p>
+            <b>Gemini（Google）</b>：<a href="https://aistudio.google.com/app/apikey" target="_blank">aistudio.google.com</a> で無料取得。カード登録不要。<br>
+            <b>Claude（Anthropic）</b>：<a href="https://console.anthropic.com" target="_blank">console.anthropic.com</a> で取得。<br>
+            <b>完全無料・ローカル</b>：<a href="https://ollama.com" target="_blank">Ollama</a> をPCにインストールすれば、APIキー不要でAIが動きます。
+          </p>
+        </div>
+      </div>
+      <div class="guide-step">
+        <div class="step-num">4</div>
+        <div class="step-body">
+          <strong>キーはどこに保存される？</strong>
+          <p>あなたのブラウザのlocalStorageのみ。外部サーバーには送信されません。</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="guide-note">
+      💡 アプリはどんどん追加されます。新着をフォローするには <a href="https://note.com" target="_blank" style="color:var(--accent)">note</a> か <a href="https://aliberaworks.com" target="_blank" style="color:var(--accent)">aliberaworks.com</a> をチェック。
+    </div>
+
+    <div class="modal-btns">
+      <label style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--text-muted);cursor:pointer;margin-right:auto">
+        <input type="checkbox" id="dontShowAgain"> 次回から表示しない
+      </label>
+      <button class="btn-primary" onclick="closeGuide()">はじめる →</button>
+    </div>
+  </div>
+</div>
+
+<!-- API KEY MODAL -->
+<div class="modal-overlay" id="apiModal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeApiModal()">×</button>
+    <h2>API / モデル設定</h2>
+    <p>APIキーを一度設定すれば、全アプリで共通して使われます。キーはあなたのブラウザにのみ保存されます。</p>
+    <label>プロバイダー</label>
+    <select class="modal-select" id="providerSelect" onchange="updatePlaceholder()">
+      <option value="anthropic">Anthropic (Claude)</option>
+      <option value="openai">OpenAI (GPT)</option>
+      <option value="google">Google (Gemini)</option>
+      <option value="ollama">Ollama（完全無料・ローカル）</option>
+    </select>
+    <label>APIキー</label>
+    <input type="password" id="apiKeyInput" placeholder="sk-ant-..." />
+    <label>モデル名（任意）</label>
+    <input type="text" id="modelInput" placeholder="claude-sonnet-4-20250514" />
+    <div class="modal-btns">
+      <button class="btn-ghost" onclick="clearApiKey()">クリア</button>
+      <button class="btn-primary" onclick="saveApiKey()">保存</button>
+    </div>
+  </div>
+</div>
+
+<!-- HERO -->
+<div class="hero" id="heroSection">
+  <div class="hero-label">App Library</div>
+  <h1>アイデアが、<em>動き出す場所。</em></h1>
+  <p>あなたのやりたいことを、すぐに動かせるツールが集まっています。<br>ブラウザで即動作。ダウンロード不要。</p>
+</div>
+
+<!-- CONTROLS -->
+<div class="controls">
+  <div class="search-wrap">
+    <span class="search-icon">🔍</span>
+    <input type="text" id="searchInput" placeholder="アプリを検索..." oninput="filterApps()" />
+  </div>
+  <div class="filter-btns">
+    <button class="filter-btn active" data-filter="all" onclick="setFilter('all', this)">すべて</button>
+    <button class="filter-btn" data-filter="free" onclick="setFilter('free', this)">無料</button>
+    <button class="filter-btn" data-filter="paid" onclick="setFilter('paid', this)">有料</button>
+    <button class="filter-btn" data-filter="ai" onclick="setFilter('ai', this)">AI使用</button>
+    <button class="filter-btn" data-filter="fav" onclick="setFilter('fav', this)">★ お気に入り</button>
+  </div>
+  <select class="sort-select" id="sortSelect" onchange="filterApps()">
+    <option value="new">新着順</option>
+    <option value="popular">人気順</option>
+    <option value="name">名前順</option>
+  </select>
+</div>
+
+<!-- TAB BAR -->
+<div class="tab-bar" id="tabBar">
+  <div class="tab-item active" data-tab="home" onclick="switchTab('home')">🏠 ホーム</div>
+</div>
+
+<!-- HOME VIEW (App Grid) -->
+<div class="app-grid-wrap" id="homeView">
+  <div class="section-label" id="sectionLabel">全アプリ</div>
+  <div class="app-grid" id="appGrid"></div>
+</div>
+
+<!-- APP VIEWER -->
+<div class="app-viewer" id="appViewer">
+  <div class="app-frame-wrap">
+    <div class="app-frame-header">
+      <span class="app-frame-title" id="frameTitle">—</span>
+      <div class="app-frame-actions">
+        <button class="frame-btn" onclick="openFullscreen()">↗ 全画面</button>
+        <button class="frame-btn" onclick="downloadApp()">↓ DL</button>
+      </div>
+    </div>
+    <iframe id="appFrame" src="" title="App"></iframe>
+  </div>
+</div>
+
+<footer>
+  <a href="https://aliberaworks.com" target="_blank">aliberaworks.com</a> &nbsp;·&nbsp;
+  © 2025 佐藤 馨 &nbsp;·&nbsp;
+  <a href="https://note.com" target="_blank">note</a>
+</footer>
+
+<script>
+  // ── APP DATA ──
+  // アプリを追加する時はここに追記するだけ
+  const APPS = [
+    {
+      id: 'careercon',
+      title: 'キャリコン練習アプリ',
+      desc: '国家試験対策。AIロールプレイで面談練習。音声入力対応。',
+      icon: '🎙️',
+      tags: ['ai', 'free'],
+      category: 'キャリア',
+      url: 'https://aliberaworks.github.io/careercon/',
+      stars: 12,
+      date: '2025-03-15',
+    },
+    // ↓ 新しいアプリはここに追加
+    // {
+    //   id: 'example',
+    //   title: 'サンプルアプリ',
+    //   desc: 'アプリの説明文。',
+    //   icon: '🔧',
+    //   tags: ['free'],  // 'free' | 'paid' | 'ai'
+    //   category: 'ツール',
+    //   url: 'apps/example/index.html',
+    //   stars: 0,
+    //   date: '2025-04-01',
+    // },
+  ];
+
+  // ── STATE ──
+  let currentFilter = 'all';
+  let openTabs = []; // { id, title, url }
+  let activeTab = 'home';
+  let favorites = JSON.parse(localStorage.getItem('arcatua_favs') || '[]');
+  let currentAppUrl = '';
+
+  // ── API KEY ──
+  function updateApiBtn() {
+    const key = localStorage.getItem('arcatua_api_key');
+    const btn = document.getElementById('apiBtn');
+    if (key) {
+      btn.textContent = '✓ API設定済み';
+      btn.classList.add('set');
+    } else {
+      btn.textContent = '⚙ API設定';
+      btn.classList.remove('set');
+    }
+  }
+
+  function openApiModal() {
+    const key = localStorage.getItem('arcatua_api_key') || '';
+    const model = localStorage.getItem('arcatua_model') || '';
+    const provider = localStorage.getItem('arcatua_provider') || 'anthropic';
+    document.getElementById('apiKeyInput').value = key;
+    document.getElementById('modelInput').value = model;
+    document.getElementById('providerSelect').value = provider;
+    document.getElementById('apiModal').classList.add('visible');
+  }
+
+  function closeApiModal() {
+    document.getElementById('apiModal').classList.remove('visible');
+  }
+
+  function saveApiKey() {
+    const key = document.getElementById('apiKeyInput').value.trim();
+    const model = document.getElementById('modelInput').value.trim();
+    const provider = document.getElementById('providerSelect').value;
+    if (key) {
+      localStorage.setItem('arcatua_api_key', key);
+      localStorage.setItem('arcatua_model', model);
+      localStorage.setItem('arcatua_provider', provider);
+    }
+    closeApiModal();
+    updateApiBtn();
+  }
+
+  function clearApiKey() {
+    localStorage.removeItem('arcatua_api_key');
+    localStorage.removeItem('arcatua_model');
+    localStorage.removeItem('arcatua_provider');
+    document.getElementById('apiKeyInput').value = '';
+    document.getElementById('modelInput').value = '';
+    closeApiModal();
+    updateApiBtn();
+  }
+
+  function updatePlaceholder() {
+    const provider = document.getElementById('providerSelect').value;
+    const placeholders = {
+      anthropic: 'sk-ant-...',
+      openai: 'sk-...',
+      google: 'AIza...',
+      ollama: '（Ollamaはキー不要）',
+    };
+    document.getElementById('apiKeyInput').placeholder = placeholders[provider] || '';
+  }
+
+  // ── FAVORITES ──
+  function toggleFav(id, btn, e) {
+    e.stopPropagation();
+    const idx = favorites.indexOf(id);
+    if (idx === -1) {
+      favorites.push(id);
+      btn.textContent = '★';
+      btn.classList.add('active');
+    } else {
+      favorites.splice(idx, 1);
+      btn.textContent = '☆';
+      btn.classList.remove('active');
+    }
+    localStorage.setItem('arcatua_favs', JSON.stringify(favorites));
+    if (currentFilter === 'fav') filterApps();
+  }
+
+  // ── FILTER & SORT ──
+  function setFilter(filter, btn) {
+    currentFilter = filter;
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    filterApps();
+  }
+
+  function filterApps() {
+    const query = document.getElementById('searchInput').value.toLowerCase();
+    const sort = document.getElementById('sortSelect').value;
+    const label = document.getElementById('sectionLabel');
+
+    let filtered = APPS.filter(app => {
+      const matchSearch = !query ||
+        app.title.toLowerCase().includes(query) ||
+        app.desc.toLowerCase().includes(query) ||
+        app.category.toLowerCase().includes(query);
+
+      const matchFilter =
+        currentFilter === 'all' ? true :
+        currentFilter === 'free' ? app.tags.includes('free') :
+        currentFilter === 'paid' ? app.tags.includes('paid') :
+        currentFilter === 'ai' ? app.tags.includes('ai') :
+        currentFilter === 'fav' ? favorites.includes(app.id) : true;
+
+      return matchSearch && matchFilter;
+    });
+
+    // Sort
+    if (sort === 'popular') filtered.sort((a, b) => b.stars - a.stars);
+    else if (sort === 'name') filtered.sort((a, b) => a.title.localeCompare(b.title, 'ja'));
+    else filtered.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+    const labels = {
+      all: `全アプリ（${filtered.length}）`,
+      free: `無料アプリ（${filtered.length}）`,
+      paid: `有料アプリ（${filtered.length}）`,
+      ai: `AI使用アプリ（${filtered.length}）`,
+      fav: `お気に入り（${filtered.length}）`,
+    };
+    label.textContent = labels[currentFilter] || `${filtered.length}件`;
+
+    renderGrid(filtered);
+  }
+
+  function renderGrid(apps) {
+    const grid = document.getElementById('appGrid');
+    if (apps.length === 0) {
+      grid.innerHTML = '<div class="no-results">アプリが見つかりません</div>';
+      return;
+    }
+    grid.innerHTML = apps.map(app => {
+      const isFav = favorites.includes(app.id);
+      const tagHTML = app.tags.map(t => {
+        const labels = { free: '無料', paid: '有料', ai: 'AI' };
+        return `<span class="tag ${t}">${labels[t] || t}</span>`;
+      }).join('');
+      return `
+        <div class="app-card" onclick="openApp('${app.id}', '${app.title}', '${app.url}')">
+          <div class="card-top">
+            <span class="card-icon">${app.icon}</span>
+            <div class="card-actions">
+              <button class="fav-btn ${isFav ? 'active' : ''}"
+                onclick="toggleFav('${app.id}', this, event)">${isFav ? '★' : '☆'}</button>
+            </div>
+          </div>
+          <div class="card-title">${app.title}</div>
+          <div class="card-desc">${app.desc}</div>
+          <div class="card-footer">
+            <div class="card-tags">
+              ${tagHTML}
+              <span class="tag category">${app.category}</span>
+            </div>
+            <span class="card-stars">★ ${app.stars}</span>
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  // ── TABS ──
+  function openApp(id, title, url) {
+    const existing = openTabs.find(t => t.id === id);
+    if (!existing) {
+      openTabs.push({ id, title, url });
+      renderTabBar();
+    }
+    switchTab(id);
+  }
+
+  function switchTab(tabId) {
+    activeTab = tabId;
+    document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
+    document.querySelector(`[data-tab="${tabId}"]`)?.classList.add('active');
+
+    if (tabId === 'home') {
+      document.getElementById('homeView').style.display = 'block';
+      document.getElementById('heroSection').style.display = 'block';
+      document.getElementById('appViewer').classList.remove('visible');
+    } else {
+      const tab = openTabs.find(t => t.id === tabId);
+      if (tab) {
+        document.getElementById('homeView').style.display = 'none';
+        document.getElementById('heroSection').style.display = 'none';
+        document.getElementById('appViewer').classList.add('visible');
+        document.getElementById('frameTitle').textContent = tab.title;
+        document.getElementById('appFrame').src = tab.url;
+        currentAppUrl = tab.url;
+      }
+    }
+  }
+
+  function closeTab(id, e) {
+    e.stopPropagation();
+    openTabs = openTabs.filter(t => t.id !== id);
+    if (activeTab === id) switchTab('home');
+    renderTabBar();
+  }
+
+  function renderTabBar() {
+    const bar = document.getElementById('tabBar');
+    const homeTab = `<div class="tab-item ${activeTab === 'home' ? 'active' : ''}" data-tab="home" onclick="switchTab('home')">🏠 ホーム</div>`;
+    const appTabs = openTabs.map(tab => `
+      <div class="tab-item ${activeTab === tab.id ? 'active' : ''}" data-tab="${tab.id}" onclick="switchTab('${tab.id}')">
+        ${tab.title}
+        <span class="tab-close" onclick="closeTab('${tab.id}', event)">×</span>
+      </div>
+    `).join('');
+    bar.innerHTML = homeTab + appTabs;
+  }
+
+  function showHome() {
+    switchTab('home');
+  }
+
+  function openFullscreen() {
+    window.open(currentAppUrl, '_blank');
+  }
+
+  function downloadApp() {
+    const a = document.createElement('a');
+    a.href = currentAppUrl;
+    a.download = '';
+    a.click();
+  }
+
+  // ── GUIDE ──
+  function closeGuide() {
+    if (document.getElementById('dontShowAgain').checked) {
+      localStorage.setItem('arcatua_guide_done', '1');
+    }
+    document.getElementById('guideModal').classList.remove('visible');
+  }
+
+  // ── INIT ──
+  updateApiBtn();
+  filterApps();
+
+  // 初回訪問時にガイド表示
+  if (!localStorage.getItem('arcatua_guide_done')) {
+    document.getElementById('guideModal').classList.add('visible');
+  }
+
+  // モーダル外クリックで閉じる
+  document.getElementById('apiModal').addEventListener('click', function(e) {
+    if (e.target === this) closeApiModal();
+  });
+</script>
+</body>
+</html>
